@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimsum & Drink Culture - App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            DEFAULT: '#800020',
+                            dark: '#5c0017',
+                            light: '#a31c38',
+                            soft: '#fbe8ec'
+                        },
+                        cream: {
+                            DEFAULT: '#fffaf2',
+                            dark: '#f3e8d3',
+                            card: '#ffffff'
+                        },
+                        pinksoft: '#f8d7da'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fffaf2;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #2d3748;
+        }
+        .btn-rounded {
+            border-radius: 9999px;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-header {
+            background: rgba(128, 0, 32, 0.95);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER / NAVIGATION ROLE SWITCHER -->
+    <header class="glass-header text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('customer')">
+                <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center text-maroon text-xl font-bold overflow-hidden shadow" id="navLogoContainer">
+                    🥟
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight" id="navBrandName">Dimsum Culture</h1>
+                    <p class="text-xs text-pinksoft opacity-90" id="navTagline">Dimsum & Minuman Segar</p>
+                </div>
+            </div>
+
+            <!-- Role Selector Buttons -->
+            <nav class="flex bg-maroon-dark p-1 rounded-full text-xs font-semibold shadow-inner">
+                <button onclick="switchView('customer')" id="btn-nav-customer" class="role-nav-btn px-4 py-2 rounded-full transition-all duration-200 bg-white text-maroon shadow">
+                    <i class="fa-solid fa-user mr-1"></i> Pelanggan
+                </button>
+                <button onclick="switchView('cashier')" id="btn-nav-cashier" class="role-nav-btn px-4 py-2 rounded-full transition-all duration-200 text-pinksoft hover:text-white">
+                    <i class="fa-solid fa-cash-register mr-1"></i> Kasir
+                </button>
+                <button onclick="switchView('admin')" id="btn-nav-admin" class="role-nav-btn px-4 py-2 rounded-full transition-all duration-200 text-pinksoft hover:text-white">
+                    <i class="fa-solid fa-user-gear mr-1"></i> Admin
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER FOR VIEWS -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
+
+        <!-- ========================================== -->
+        <!-- 1. HALAMAN PELANGGAN (CUSTOMER VIEW) -->
+        <!-- ========================================== -->
+        <section id="view-customer" class="space-y-8">
+            <!-- Navigation Sub-Menu Pelanggan -->
+            <div class="flex justify-center border-b border-maroon-soft pb-2 space-x-6 text-sm font-semibold text-gray-600">
+                <button onclick="switchCustTab('beranda')" id="cust-tab-beranda" class="cust-tab-btn text-maroon border-b-2 border-maroon pb-2">Beranda</button>
+                <button onclick="switchCustTab('menu')" id="cust-tab-menu" class="cust-tab-btn hover:text-maroon pb-2">Menu Produk</button>
+                <button onclick="switchCustTab('promo')" id="cust-tab-promo" class="cust-tab-btn hover:text-maroon pb-2">Promo Spesial</button>
+                <button onclick="switchCustTab('tentang')" id="cust-tab-tentang" class="cust-tab-btn hover:text-maroon pb-2">Tentang Kami</button>
+            </div>
+
+            <!-- TAB BERANDA -->
+            <div id="cust-sec-beranda" class="space-y-8">
+                <!-- Hero Banner -->
+                <div class="bg-gradient-to-r from-maroon to-maroon-light rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-4 max-w-xl text-center md:text-left">
+                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold tracking-wide text-pinksoft">
+                            ✨ Cita Rasa Otentik & Segar
+                        </span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight text-white" id="heroBrandName">
+                            Dimsum & Drink Culture
+                        </h2>
+                        <p class="text-pinksoft text-sm sm:text-base leading-relaxed" id="heroDescription">
+                            Nikmati kelezatan dimsum kukus & goreng hangat yang lembut bersama kesegaran aneka varian minuman kekinian favoritmu!
+                        </p>
+                        <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
+                            <button onclick="switchCustTab('menu')" class="px-6 py-3 bg-white text-maroon font-bold rounded-full shadow-lg hover:bg-cream transition transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-utensils mr-2"></i> Lihat Menu Sekarang
+                            </button>
+                            <button onclick="switchCustTab('promo')" class="px-6 py-3 bg-maroon-dark text-white font-bold rounded-full shadow hover:bg-black/30 transition">
+                                <i class="fa-solid fa-tags mr-2"></i> Lihat Promo
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-80 h-64 rounded-2xl overflow-hidden shadow-2xl relative border-4 border-white/20">
+                        <img id="heroImage" src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&q=80" alt="Dimsum Hero" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Highlight Featured Category -->
+                <div>
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-maroon">Kategori Pilihan</h3>
+                            <p class="text-xs text-gray-500">Pilih menu favoritmu berdasarkan jenisnya</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                        <div onclick="filterCategoryAndSwitch('Dimsum')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-maroon-soft text-center transition hover:-translate-y-1">
+                            <div class="text-3xl mb-2">🥟</div>
+                            <div class="font-bold text-sm text-gray-800">Dimsum</div>
+                        </div>
+                        <div onclick="filterCategoryAndSwitch('Tea Series')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-maroon-soft text-center transition hover:-translate-y-1">
+                            <div class="text-3xl mb-2">🍹</div>
+                            <div class="font-bold text-sm text-gray-800">Tea Series</div>
+                        </div>
+                        <div onclick="filterCategoryAndSwitch('Milk Series')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-maroon-soft text-center transition hover:-translate-y-1">
+                            <div class="text-3xl mb-2">🧋</div>
+                            <div class="font-bold text-sm text-gray-800">Milk Series</div>
+                        </div>
+                        <div onclick="filterCategoryAndSwitch('Matcha')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-maroon-soft text-center transition hover:-translate-y-1">
+                            <div class="text-3xl mb-2">🍵</div>
+                            <div class="font-bold text-sm text-gray-800">Matcha</div>
+                        </div>
+                        <div onclick="filterCategoryAndSwitch('Coffee Series')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-maroon-soft text-center transition hover:-translate-y-1">
+                            <div class="text-3xl mb-2">☕</div>
+                            <div class="font-bold text-sm text-gray-800">Coffee Series</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB MENU PRODUK -->
+            <div id="cust-sec-menu" class="hidden space-y-6">
+                <!-- Filter Pills -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-2 hide-scrollbar" id="custCategoryContainer">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="custProductGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- TAB PROMO -->
+            <div id="cust-sec-promo" class="hidden space-y-6">
+                <div class="text-center max-w-xl mx-auto mb-6">
+                    <h3 class="text-2xl font-bold text-maroon">Promo & Penawaran Spesial 🎉</h3>
+                    <p class="text-sm text-gray-600">Gunakan promo terbaik setiap transaksi di kedai kami!</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="custPromoGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- TAB TENTANG KAMI -->
+            <div id="cust-sec-tentang" class="hidden space-y-6">
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-maroon-soft max-w-3xl mx-auto space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-maroon" id="aboutBrandName">Dimsum & Drink Culture</h3>
+                        <p class="text-sm text-gray-500 mt-1" id="aboutDescription">Deskripsi Usaha</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-start space-x-3 p-3 bg-cream rounded-2xl">
+                            <div class="text-maroon text-xl"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-800">Alamat Kedai</h4>
+                                <p class="text-xs text-gray-600" id="aboutAddress">-</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 bg-cream rounded-2xl">
+                            <div class="text-maroon text-xl"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-800">Jam Operasional</h4>
+                                <p class="text-xs text-gray-600" id="aboutHours">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 text-center space-y-3">
+                        <h4 class="font-bold text-sm text-gray-700">Hubungi & Ikuti Kami</h4>
+                        <div class="flex justify-center flex-wrap gap-4">
+                            <a id="linkWA" href="#" target="_blank" class="px-5 py-2.5 bg-green-600 text-white rounded-full text-xs font-semibold flex items-center hover:bg-green-700 transition">
+                                <i class="fa-brands fa-whatsapp text-base mr-2"></i> WhatsApp
+                            </a>
+                            <a id="linkIG" href="#" target="_blank" class="px-5 py-2.5 bg-pink-600 text-white rounded-full text-xs font-semibold flex items-center hover:bg-pink-700 transition">
+                                <i class="fa-brands fa-instagram text-base mr-2"></i> Instagram
+                            </a>
+                            <a id="linkTikTok" href="#" target="_blank" class="px-5 py-2.5 bg-black text-white rounded-full text-xs font-semibold flex items-center hover:bg-gray-800 transition">
+                                <i class="fa-brands fa-tiktok text-base mr-2"></i> TikTok
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. HALAMAN KASIR (CASHIER / POS VIEW) -->
+        <!-- ========================================== -->
+        <section id="view-cashier" class="hidden">
+            <!-- Login Overlay Kasir -->
+            <div id="cashierAuthModal" class="flex flex-col items-center justify-center py-12">
+                <div class="bg-white p-8 rounded-3xl shadow-xl max-w-sm w-full border border-maroon-soft text-center space-y-4">
+                    <div class="w-16 h-16 bg-maroon-soft text-maroon rounded-full flex items-center justify-center mx-auto text-2xl">
+                        <i class="fa-solid fa-cash-register"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-maroon">Login Kasir</h3>
+                    <p class="text-xs text-gray-500">Masukkan PIN Kasir untuk mengelola POS (Default: <code class="bg-gray-100 px-1 rounded text-maroon font-bold">kasir123</code>)</p>
+                    <input type="password" id="cashierPinInput" placeholder="Masukkan PIN Kasir" class="w-full px-4 py-3 border border-gray-300 rounded-xl text-center font-bold tracking-widest text-lg focus:outline-none focus:border-maroon">
+                    <button onclick="loginCashier()" class="w-full py-3 bg-maroon text-white font-bold rounded-xl hover:bg-maroon-dark transition">
+                        Masuk POS Kasir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main POS Interface -->
+            <div id="cashierMainContent" class="hidden space-y-4">
+                <div class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-maroon-soft">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="font-bold text-sm text-gray-700">Kasir Aktif: Stand-01</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="switchCashierSubTab('pos')" id="pos-subtab-pos" class="px-4 py-1.5 rounded-full text-xs font-bold bg-maroon text-white">
+                            <i class="fa-solid fa-calculator mr-1"></i> Transaksi Baru
+                        </button>
+                        <button onclick="switchCashierSubTab('history')" id="pos-subtab-history" class="px-4 py-1.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Transaksi
+                        </button>
+                        <button onclick="logoutCashier()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-red-100 text-red-600 hover:bg-red-200">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sub View 1: Transaksi POS -->
+                <div id="cashier-sec-pos" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left Column: Menu Picker -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-maroon-soft flex gap-2">
+                            <input type="text" id="cashierSearch" oninput="renderCashierMenu()" placeholder="Cari nama produk..." class="flex-grow px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-maroon">
+                            <select id="cashierCategoryFilter" onchange="renderCashierMenu()" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-maroon">
+                                <option value="Semua">Semua Kategori</option>
+                                <option value="Dimsum">Dimsum</option>
+                                <option value="Tea Series">Tea Series</option>
+                                <option value="Milk Series">Milk Series</option>
+                                <option value="Matcha">Matcha</option>
+                                <option value="Coffee Series">Coffee Series</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="cashierProductGrid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Cart & Summary -->
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-maroon-soft flex flex-col justify-between space-y-4 h-fit">
+                        <div>
+                            <div class="flex justify-between items-center border-b pb-3 mb-3">
+                                <h3 class="font-bold text-gray-800 text-base"><i class="fa-solid fa-basket-shopping text-maroon mr-2"></i>Pesanan Saat Ini</h3>
+                                <button onclick="clearCart()" class="text-xs text-red-500 hover:underline">Kosongkan</button>
+                            </div>
+
+                            <!-- Cart Items List -->
+                            <div class="space-y-3 max-h-72 overflow-y-auto pr-1 hide-scrollbar" id="cartItemsList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Calculation & Checkout Form -->
+                        <div class="border-t pt-3 space-y-3">
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Subtotal</span>
+                                <span font-semibold id="cartSubtotal">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-bold text-maroon border-t pt-2">
+                                <span>Total Tagihan</span>
+                                <span id="cartTotal">Rp 0</span>
+                            </div>
+
+                            <div class="space-y-2 pt-2">
+                                <label class="block text-xs font-bold text-gray-700">Metode Pembayaran</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" onclick="setPaymentMethod('Cash')" id="payBtnCash" class="py-2 border-2 border-maroon bg-maroon-soft text-maroon font-bold rounded-xl text-xs flex items-center justify-center gap-1">
+                                        💵 Tunai (Cash)
+                                    </button>
+                                    <button type="button" onclick="setPaymentMethod('QRIS')" id="payBtnQRIS" class="py-2 border-2 border-gray-200 text-gray-600 font-bold rounded-xl text-xs flex items-center justify-center gap-1">
+                                        📱 QRIS
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button onclick="processCheckout()" class="w-full py-3 bg-maroon text-white font-bold rounded-2xl hover:bg-maroon-dark transition shadow-lg mt-2">
+                                <i class="fa-solid fa-check-circle mr-1"></i> Selesaikan Transaksi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub View 2: Riwayat Kasir -->
+                <div id="cashier-sec-history" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft">
+                    <h3 class="font-bold text-gray-800 text-lg mb-4">Riwayat Penjualan Hari Ini</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-cream text-maroon border-b">
+                                <tr>
+                                    <th class="p-3">No TRX</th>
+                                    <th class="p-3">Waktu</th>
+                                    <th class="p-3">Detail Item</th>
+                                    <th class="p-3">Metode</th>
+                                    <th class="p-3 font-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cashierHistoryTable">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. HALAMAN ADMIN & CMS (ADMIN VIEW) -->
+        <!-- ========================================== -->
+        <section id="view-admin" class="hidden">
+            <!-- Login Overlay Admin -->
+            <div id="adminAuthModal" class="flex flex-col items-center justify-center py-12">
+                <div class="bg-white p-8 rounded-3xl shadow-xl max-w-sm w-full border border-maroon-soft text-center space-y-4">
+                    <div class="w-16 h-16 bg-maroon-soft text-maroon rounded-full flex items-center justify-center mx-auto text-2xl">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-maroon">Login Panel Admin</h3>
+                    <p class="text-xs text-gray-500">Masukkan PIN Admin untuk kelola usaha & website (Default: <code class="bg-gray-100 px-1 rounded text-maroon font-bold">admin123</code>)</p>
+                    <input type="password" id="adminPinInput" placeholder="Masukkan PIN Admin" class="w-full px-4 py-3 border border-gray-300 rounded-xl text-center font-bold tracking-widest text-lg focus:outline-none focus:border-maroon">
+                    <button onclick="loginAdmin()" class="w-full py-3 bg-maroon text-white font-bold rounded-xl hover:bg-maroon-dark transition">
+                        Masuk Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Main Layout -->
+            <div id="adminMainContent" class="hidden space-y-6">
+                <!-- Admin Navbar Navigation -->
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-maroon-soft flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-3 py-1 bg-maroon text-white rounded-full text-xs font-bold">ADMIN PANEL</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs font-bold">
+                        <button onclick="switchAdminTab('dashboard')" id="admin-tab-dashboard" class="admin-tab-btn px-4 py-2 rounded-xl bg-maroon text-white">Dashboard</button>
+                        <button onclick="switchAdminTab('sales')" id="admin-tab-sales" class="admin-tab-btn px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Penjualan & Laporan</button>
+                        <button onclick="switchAdminTab('stock')" id="admin-tab-stock" class="admin-tab-btn px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Stok Bahan Baku</button>
+                        <button onclick="switchAdminTab('cms')" id="admin-tab-cms" class="admin-tab-btn px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">🌐 Kelola Website</button>
+                        <button onclick="logoutAdmin()" class="px-3 py-2 rounded-xl bg-red-100 text-red-600 hover:bg-red-200"><i class="fa-solid fa-power-off"></i> Logout</button>
+                    </div>
+                </div>
+
+                <!-- SUB-TAB 1: DASHBOARD OVERVIEW -->
+                <div id="admin-sec-dashboard" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border-l-4 border-maroon flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold uppercase">Total Penjualan</p>
+                                <h4 class="text-2xl font-extrabold text-maroon mt-1" id="dashTotalRevenue">Rp 0</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-maroon-soft rounded-2xl flex items-center justify-center text-maroon text-xl"><i class="fa-solid fa-coins"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border-l-4 border-blue-500 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold uppercase">Total Transaksi</p>
+                                <h4 class="text-2xl font-extrabold text-gray-800 mt-1" id="dashTotalTrx">0</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-receipt"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border-l-4 border-green-500 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold uppercase">Produk Terjual</p>
+                                <h4 class="text-2xl font-extrabold text-gray-800 mt-1" id="dashItemsSold">0 pcs</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-box-open"></i></div>
+                        </div>
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border-l-4 border-amber-500 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold uppercase">Stok Menipis</p>
+                                <h4 class="text-2xl font-extrabold text-amber-600 mt-1" id="dashLowStockCount">0 Bahan</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts & Quick Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                            <h4 class="font-bold text-gray-800 text-base"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i>Peringatan Stok Menipis</h4>
+                            <div class="space-y-2" id="dashLowStockList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                            <h4 class="font-bold text-gray-800 text-base"><i class="fa-solid fa-trophy text-yellow-500 mr-2"></i>Produk Terlaris</h4>
+                            <div class="space-y-2" id="dashTopProductsList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-TAB 2: PENJUALAN & LAPORAN -->
+                <div id="admin-sec-sales" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-gray-800 text-lg">Laporan & Riwayat Penjualan Lengkap</h3>
+                            <button onclick="clearAllTransactions()" class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-xs font-bold hover:bg-red-200">
+                                Reset Riwayat
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-cream text-maroon border-b">
+                                    <tr>
+                                        <th class="p-3">No Transaksi</th>
+                                        <th class="p-3">Waktu</th>
+                                        <th class="p-3">Produk & Jumlah</th>
+                                        <th class="p-3">Metode</th>
+                                        <th class="p-3">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminSalesTable">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-TAB 3: STOK BAHAN BAKU -->
+                <div id="admin-sec-stock" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-gray-800 text-lg">Manajemen Stok Bahan Baku</h3>
+                            <button onclick="openStockModal()" class="px-4 py-2 bg-maroon text-white rounded-xl text-xs font-bold hover:bg-maroon-dark">
+                                + Tambah Bahan Baku
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-cream text-maroon border-b">
+                                    <tr>
+                                        <th class="p-3">Nama Bahan</th>
+                                        <th class="p-3">Jumlah Stok</th>
+                                        <th class="p-3">Satuan</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-center">Aksi / Adjust</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminStockTable">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-TAB 4: KELOLA WEBSITE (CMS REAL-TIME) -->
+                <div id="admin-sec-cms" class="hidden space-y-6">
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-2xl text-xs text-amber-800 flex items-center justify-between">
+                        <div>
+                            <strong>💡 Info CMS Real-time:</strong> Setiap perubahan yang disimpan di sini akan langsung memperbarui tampilan Halaman Pelanggan dan Kasir tanpa mengedit kode HTML!
+                        </div>
+                    </div>
+
+                    <!-- 1. Identitas Usaha Form -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                        <h4 class="font-bold text-maroon text-lg border-b pb-2"><i class="fa-solid fa-store mr-2"></i>Identitas Usaha</h4>
+                        <form id="cmsIdentityForm" onsubmit="saveIdentity(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Nama Usaha</label>
+                                <input type="text" id="cmsStoreName" required class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Logo (Emoji atau Icon SVG)</label>
+                                <input type="text" id="cmsStoreLogo" required class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block font-bold text-gray-700 mb-1">Deskripsi Singkat Usaha</label>
+                                <textarea id="cmsStoreDesc" rows="2" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon"></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block font-bold text-gray-700 mb-1">Alamat Kedai</label>
+                                <input type="text" id="cmsStoreAddress" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Jam Operasional</label>
+                                <input type="text" id="cmsStoreHours" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Nomor WhatsApp (mis: 628123456789)</label>
+                                <input type="text" id="cmsStoreWA" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Username Instagram</label>
+                                <input type="text" id="cmsStoreIG" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Username TikTok</label>
+                                <input type="text" id="cmsStoreTikTok" class="w-full p-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-maroon">
+                            </div>
+                            <div class="md:col-span-2 pt-2">
+                                <button type="submit" class="px-6 py-2.5 bg-maroon text-white font-bold rounded-xl hover:bg-maroon-dark transition">
+                                    Simpan Perubahan Identitas Usaha
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Kelola Menu Produk -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <h4 class="font-bold text-maroon text-lg"><i class="fa-solid fa-utensils mr-2"></i>Kelola Menu Produk</h4>
+                            <button onclick="openProductModal()" class="px-4 py-2 bg-maroon text-white text-xs font-bold rounded-xl hover:bg-maroon-dark">
+                                + Tambah Produk Baru
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="cmsProductList">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- 3. Kelola Promo -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-maroon-soft space-y-4">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <h4 class="font-bold text-maroon text-lg"><i class="fa-solid fa-bullhorn mr-2"></i>Kelola Promo</h4>
+                            <button onclick="openPromoModal()" class="px-4 py-2 bg-maroon text-white text-xs font-bold rounded-xl hover:bg-maroon-dark">
+                                + Tambah Promo Baru
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="cmsPromoList">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-maroon-dark text-pinksoft py-6 border-t border-maroon">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
+            <p class="font-semibold" id="footerText">© 2026 Dimsum & Drink Culture. All Rights Reserved.</p>
+            <p class="opacity-75">Sistem Kasir & Management UMKM Interaktif (LocalStorage Persistent)</p>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODALS SECTION -->
+    <!-- ========================================== -->
+
+    <!-- Modal Detail Produk Pelanggan -->
+    <div id="productDetailModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl space-y-4">
+            <div class="h-56 relative">
+                <img id="detailImg" src="" alt="Produk" class="w-full h-full object-cover">
+                <button onclick="closeModal('productDetailModal')" class="absolute top-3 right-3 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black">
+                    ✕
+                </button>
+            </div>
+            <div class="p-6 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span id="detailCategory" class="px-2.5 py-0.5 bg-maroon-soft text-maroon text-xs font-bold rounded-full">Categoriy</span>
+                        <h3 id="detailTitle" class="text-xl font-bold text-gray-800 mt-1">Nama Produk</h3>
+                    </div>
+                    <span id="detailPrice" class="text-lg font-extrabold text-maroon">Rp 0</span>
+                </div>
+                <p id="detailDesc" class="text-sm text-gray-600 leading-relaxed">Deskripsi produk...</p>
+                <div class="pt-4">
+                    <button onclick="closeModal('productDetailModal')" class="w-full py-3 bg-maroon text-white font-bold rounded-2xl">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form Product (Create / Edit) -->
+    <div id="productFormModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <h3 id="productFormTitle" class="text-lg font-bold text-maroon border-b pb-2">Tambah Produk Baru</h3>
+            <form id="productForm" onsubmit="saveProduct(event)" class="space-y-3 text-sm">
+                <input type="hidden" id="prodFormId">
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Produk</label>
+                    <input type="text" id="prodFormName" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Kategori</label>
+                    <select id="prodFormCategory" class="w-full p-2 border rounded-xl">
+                        <option value="Dimsum">Dimsum</option>
+                        <option value="Tea Series">Tea Series</option>
+                        <option value="Milk Series">Milk Series</option>
+                        <option value="Matcha">Matcha</option>
+                        <option value="Coffee Series">Coffee Series</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Harga (Rp)</label>
+                    <input type="number" id="prodFormPrice" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">URL Foto Produk</label>
+                    <input type="url" id="prodFormImage" required class="w-full p-2 border rounded-xl" placeholder="https://...">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Deskripsi Produk</label>
+                    <textarea id="prodFormDesc" rows="2" class="w-full p-2 border rounded-xl"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('productFormModal')" class="px-4 py-2 bg-gray-200 rounded-xl font-bold">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-maroon text-white font-bold rounded-xl">Simpan Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form Promo (Create / Edit) -->
+    <div id="promoFormModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 id="promoFormTitle" class="text-lg font-bold text-maroon border-b pb-2">Tambah Promo</h3>
+            <form id="promoForm" onsubmit="savePromo(event)" class="space-y-3 text-sm">
+                <input type="hidden" id="promoFormId">
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Judul Promo</label>
+                    <input type="text" id="promoFormTitleInput" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Deskripsi Promo</label>
+                    <textarea id="promoFormDesc" rows="2" required class="w-full p-2 border rounded-xl"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Badge Tag Promo (misal: Diskon / Gratis)</label>
+                    <input type="text" id="promoFormTag" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('promoFormModal')" class="px-4 py-2 bg-gray-200 rounded-xl font-bold">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-maroon text-white font-bold rounded-xl">Simpan Promo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form Stock (Create / Edit) -->
+    <div id="stockFormModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 id="stockFormTitle" class="text-lg font-bold text-maroon border-b pb-2">Tambah Bahan Baku</h3>
+            <form id="stockForm" onsubmit="saveStock(event)" class="space-y-3 text-sm">
+                <input type="hidden" id="stockFormId">
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Bahan Baku</label>
+                    <input type="text" id="stockFormName" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Jumlah Stok</label>
+                    <input type="number" id="stockFormQty" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Satuan (kg, pcs, pack, liter, dll)</label>
+                    <input type="text" id="stockFormUnit" required class="w-full p-2 border rounded-xl">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('stockFormModal')" class="px-4 py-2 bg-gray-200 rounded-xl font-bold">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-maroon text-white font-bold rounded-xl">Simpan Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Struk Transaksi Modal -->
+    <div id="receiptModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                ✓
+            </div>
+            <h3 class="font-bold text-gray-800 text-lg">Transaksi Berhasil!</h3>
+            <p class="text-xs text-gray-500">Struk cetak transaksi kasir</p>
+
+            <div class="bg-cream p-4 rounded-2xl text-left font-mono text-xs space-y-2 border border-maroon-soft" id="receiptContent">
+                <!-- Dynamic receipt -->
+            </div>
+
+            <button onclick="closeModal('receiptModal')" class="w-full py-3 bg-maroon text-white font-bold rounded-2xl">
+                Selesai & Transaksi Baru
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold hidden z-50 flex items-center space-x-2">
+        <span id="toastMsg">Notification message</span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <!-- ========================================== -->
+    <script>
+        /* -------------------------------------------------------------
+           1. DEFAULT INITIAL STATE & LOCALSTORAGE MANAGER
+        ------------------------------------------------------------- */
+        const DEFAULT_STATE = {
+            identity: {
+                name: "Dimsum & Drink Culture",
+                logo: "🥟",
+                description: "Dimsum hangat kukus & goreng otentik dikombinasikan dengan minuman segar kekinian terfavorit!",
+                address: "Jl. Kuliner Raya No. 88, Jakarta Selatan",
+                hours: "10.00 - 22.00 WIB",
+                wa: "6281234567890",
+                ig: "dimsum.drink.culture",
+                tiktok: "dimsumdrinkculture"
+            },
+            products: [
+                { id: "p1", name: "Dimsum Ayam Mentai (Isi 4)", category: "Dimsum", price: 18000, image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=500&q=80", description: "Dimsum olahan daging ayam segar dilapisi saus mentai gurih dibakar sempurna." },
+                { id: "p2", name: "Dimsum Udang Steamed (Isi 4)", category: "Dimsum", price: 20000, image: "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=500&q=80", description: "Hakau dimsum transparan dengan isian udang utuh renyah dan gurih." },
+                { id: "p3", name: "Dimsum Goreng Crispy (Isi 5)", category: "Dimsum", price: 17000, image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=500&q=80", description: "Dimsum goreng renyah di luar, lembut di dalam disajikan dengan saus asam manis." },
+                { id: "p4", name: "Jasmine Lemon Tea", category: "Tea Series", price: 10000, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80", description: "Teh melati seduh alami dipadukan dengan perasan lemon segar pelupas dahaga." },
+                { id: "p5", name: "Brown Sugar Boba Milk", category: "Milk Series", price: 18000, image: "https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=500&q=80", description: "Susu segar dipadu brown sugar karamel otentik dan boba kenyal." },
+                { id: "p6", name: "Uji Matcha Latte", category: "Matcha", price: 20000, image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=500&q=80", description: "Matcha Jepang asli dengan rasa creamy manis seimbang." },
+                { id: "p7", name: "Es Kopi Susu Gula Aren", category: "Coffee Series", price: 15000, image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=500&q=80", description: "Espresso mantap bercampur susu gurih dan manisnya gula aren alami." }
+            ],
+            promos: [
+                { id: "pr1", title: "Promo Grand Opening 🎉", desc: "Diskon 20% untuk semua item transaksi pertama kamu!", tag: "Hemat 20%" },
+                { id: "pr2", title: "Beli 2 Es Teh Gratis 1 🍹", desc: "Setiap pembelian 2 Jasmine Lemon Tea dapatkan 1 gratis Tea Series.", tag: "Buy 2 Get 1" },
+                { id: "pr3", title: "Bundle Dimsum & Teh 🥟", desc: "Beli 1 Dimsum Isi 6 Pcs Gratis 1 Es Teh Segar.", tag: "Combo Hemat" }
+            ],
+            stocks: [
+                { id: "s1", name: "Tepung Tapioka", qty: 25, unit: "kg" },
+                { id: "s2", name: "Kulit Dimsum", qty: 150, unit: "pack" },
+                { id: "s3", name: "Daging Ayam Cincang", qty: 8, unit: "kg" },
+                { id: "s4", name: "Udang Segar", qty: 4, unit: "kg" },
+                { id: "s5", name: "Daun Teh Premium", qty: 10, unit: "kg" },
+                { id: "s6", name: "Susu UHT", qty: 30, unit: "liter" },
+                { id: "s7", name: "Bubuk Matcha", qty: 3, unit: "kg" },
+                { id: "s8", name: "Biji Kopi Espresso", qty: 5, unit: "kg" },
+                { id: "s9", name: "Gula Cair", qty: 15, unit: "liter" },
+                { id: "s10", name: "Es Batu Kristal", qty: 50, unit: "kg" }
+            ],
+            transactions: []
+        };
+
+        // Application State Holder
+        let appState = {};
+        let currentCart = [];
+        let selectedCategory = "Semua";
+        let selectedPayment = "Cash";
+
+        // Initialize App State
+        function initStorage() {
+            const stored = localStorage.getItem("dimsum_app_db");
+            if (stored) {
+                try {
+                    appState = JSON.parse(stored);
+                } catch (e) {
+                    appState = DEFAULT_STATE;
+                }
+            } else {
+                appState = DEFAULT_STATE;
+                saveState();
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem("dimsum_app_db", JSON.stringify(appState));
+            renderUniversal();
+        }
+
+        /* -------------------------------------------------------------
+           2. UNIVERSAL RENDERER & ROUTER
+        ------------------------------------------------------------- */
+        function switchView(viewName) {
+            document.getElementById('view-customer').classList.add('hidden');
+            document.getElementById('view-cashier').classList.add('hidden');
+            document.getElementById('view-admin').classList.add('hidden');
+
+            document.querySelectorAll('.role-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-maroon', 'shadow');
+                btn.classList.add('text-pinksoft');
+            });
+
+            const activeBtn = document.getElementById(`btn-nav-${viewName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-maroon', 'shadow');
+                activeBtn.classList.remove('text-pinksoft');
+            }
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+        }
+
+        function renderUniversal() {
+            // Render Dynamic Identity
+            const iden = appState.identity;
+            document.getElementById('navBrandName').innerText = iden.name;
+            document.getElementById('navTagline').innerText = iden.description.substring(0, 30) + "...";
+            document.getElementById('navLogoContainer').innerHTML = iden.logo;
+            document.getElementById('heroBrandName').innerText = iden.name;
+            document.getElementById('heroDescription').innerText = iden.description;
+            document.getElementById('aboutBrandName').innerText = iden.name;
+            document.getElementById('aboutDescription').innerText = iden.description;
+            document.getElementById('aboutAddress').innerText = iden.address;
+            document.getElementById('aboutHours').innerText = iden.hours;
+            document.getElementById('linkWA').href = `https://wa.me/${iden.wa}`;
+            document.getElementById('linkIG').href = `https://instagram.com/${iden.ig}`;
+            document.getElementById('linkTikTok').href = `https://tiktok.com/@${iden.tiktok}`;
+            document.getElementById('footerText').innerText = `© 2026 ${iden.name}. All Rights Reserved.`;
+
+            // Customer Tab Dynamic Renders
+            renderCustomerCategories();
+            renderCustomerProducts();
+            renderCustomerPromos();
+
+            // Cashier Renders
+            renderCashierMenu();
+            renderCartUI();
+            renderCashierHistory();
+
+            // Admin Renders
+            renderAdminDashboard();
+            renderAdminSales();
+            renderAdminStock();
+            renderAdminCMS();
+        }
+
+        /* -------------------------------------------------------------
+           3. PELANGGAN LOGIC & RENDERERS
+        ------------------------------------------------------------- */
+        function switchCustTab(tabName) {
+            document.querySelectorAll('.cust-tab-btn').forEach(b => {
+                b.classList.remove('text-maroon', 'border-b-2', 'border-maroon');
+                b.classList.add('hover:text-maroon');
+            });
+            document.getElementById(`cust-tab-${tabName}`).classList.add('text-maroon', 'border-b-2', 'border-maroon');
+
+            document.getElementById('cust-sec-beranda').classList.add('hidden');
+            document.getElementById('cust-sec-menu').classList.add('hidden');
+            document.getElementById('cust-sec-promo').classList.add('hidden');
+            document.getElementById('cust-sec-tentang').classList.add('hidden');
+
+            document.getElementById(`cust-sec-${tabName}`).classList.remove('hidden');
+        }
+
+        function filterCategoryAndSwitch(cat) {
+            selectedCategory = cat;
+            switchCustTab('menu');
+            renderCustomerCategories();
+            renderCustomerProducts();
+        }
+
+        function renderCustomerCategories() {
+            const categories = ["Semua", "Dimsum", "Tea Series", "Milk Series", "Matcha", "Coffee Series"];
+            const container = document.getElementById('custCategoryContainer');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCustCategory('${cat}')" class="px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition ${selectedCategory === cat ? 'bg-maroon text-white shadow' : 'bg-white text-gray-700 hover:bg-cream border border-gray-200'}">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCustCategory(cat) {
+            selectedCategory = cat;
+            renderCustomerCategories();
+            renderCustomerProducts();
+        }
+
+        function renderCustomerProducts() {
+            const grid = document.getElementById('custProductGrid');
+            const filtered = selectedCategory === "Semua" 
+                ? appState.products 
+                : appState.products.filter(p => p.category === selectedCategory);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400 font-semibold">Tidak ada produk dalam kategori ini.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-maroon-soft flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 overflow-hidden relative">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x300/800020/fff?text=Dimsum+Drink'">
+                            <span class="absolute top-3 left-3 px-3 py-1 bg-maroon/80 text-white rounded-full text-[10px] font-bold backdrop-blur-md">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <h4 class="font-bold text-gray-800 text-sm line-clamp-1">${p.name}</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">${p.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 flex justify-between items-center">
+                        <span class="font-extrabold text-maroon text-base">Rp ${p.price.toLocaleString('id-ID')}</span>
+                        <button onclick="openProductDetail('${p.id}')" class="px-3.5 py-1.5 bg-cream hover:bg-maroon hover:text-white text-maroon border border-maroon-soft font-bold text-xs rounded-full transition">
+                            Detail
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductDetail(id) {
+            const prod = appState.products.find(p => p.id === id);
+            if (!prod) return;
+
+            document.getElementById('detailImg').src = prod.image;
+            document.getElementById('detailTitle').innerText = prod.name;
+            document.getElementById('detailCategory').innerText = prod.category;
+            document.getElementById('detailPrice').innerText = `Rp ${prod.price.toLocaleString('id-ID')}`;
+            document.getElementById('detailDesc').innerText = prod.description;
+
+            document.getElementById('productDetailModal').classList.remove('hidden');
+        }
+
+        function renderCustomerPromos() {
+            const grid = document.getElementById('custPromoGrid');
+            grid.innerHTML = appState.promos.map(pr => `
+                <div class="bg-gradient-to-br from-maroon to-maroon-dark text-white p-6 rounded-3xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-3 z-10">
+                        <span class="px-3 py-1 bg-white/20 text-pinksoft rounded-full text-xs font-bold">${pr.tag}</span>
+                        <h4 class="text-xl font-bold">${pr.title}</h4>
+                        <p class="text-xs text-pinksoft leading-relaxed">${pr.desc}</p>
+                    </div>
+                    <div class="pt-4 z-10">
+                        <button onclick="switchCustTab('menu')" class="px-4 py-2 bg-white text-maroon rounded-full text-xs font-bold hover:bg-cream">
+                            Gunakan Promo
+                        </button>
+                    </div>
+                    <div class="absolute -right-6 -bottom-6 text-7xl opacity-10 font-bold">PROMO</div>
+                </div>
+            `).join('');
+        }
+
+        /* -------------------------------------------------------------
+           4. KASIR (POS) LOGIC
+        ------------------------------------------------------------- */
+        let isCashierLoggedIn = false;
+
+        function loginCashier() {
+            const pin = document.getElementById('cashierPinInput').value;
+            if (pin === "kasir123") {
+                isCashierLoggedIn = true;
+                document.getElementById('cashierAuthModal').classList.add('hidden');
+                document.getElementById('cashierMainContent').classList.remove('hidden');
+                showToast("Berhasil login Kasir!");
+            } else {
+                showToast("PIN Kasir Salah! (Default: kasir123)");
+            }
+        }
+
+        function logoutCashier() {
+            isCashierLoggedIn = false;
+            document.getElementById('cashierAuthModal').classList.remove('hidden');
+            document.getElementById('cashierMainContent').classList.add('hidden');
+            document.getElementById('cashierPinInput').value = "";
+        }
+
+        function switchCashierSubTab(sub) {
+            document.getElementById('cashier-sec-pos').classList.add('hidden');
+            document.getElementById('cashier-sec-history').classList.add('hidden');
+
+            document.getElementById('pos-subtab-pos').className = "px-4 py-1.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600";
+            document.getElementById('pos-subtab-history').className = "px-4 py-1.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600";
+
+            document.getElementById(`cashier-sec-${sub}`).classList.remove('hidden');
+            document.getElementById(`pos-subtab-${sub}`).className = "px-4 py-1.5 rounded-full text-xs font-bold bg-maroon text-white";
+        }
+
+        function renderCashierMenu() {
+            const search = document.getElementById('cashierSearch')?.value.toLowerCase() || "";
+            const cat = document.getElementById('cashierCategoryFilter')?.value || "Semua";
+
+            const filtered = appState.products.filter(p => {
+                const matchName = p.name.toLowerCase().includes(search);
+                const matchCat = cat === "Semua" || p.category === cat;
+                return matchName && matchCat;
+            });
+
+            const grid = document.getElementById('cashierProductGrid');
+            if (!grid) return;
+
+            grid.innerHTML = filtered.map(p => `
+                <div onclick="addToCart('${p.id}')" class="bg-white p-3 rounded-2xl shadow-sm border border-maroon-soft hover:border-maroon cursor-pointer transition flex flex-col justify-between space-y-2">
+                    <div class="h-24 rounded-xl overflow-hidden">
+                        <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/800020/fff?text=Menu'">
+                    </div>
+                    <div>
+                        <h5 class="font-bold text-xs text-gray-800 line-clamp-1">${p.name}</h5>
+                        <p class="font-extrabold text-maroon text-xs mt-1">Rp ${p.price.toLocaleString('id-ID')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(prodId) {
+            const prod = appState.products.find(p => p.id === prodId);
+            if (!prod) return;
+
+            const exist = currentCart.find(item => item.id === prodId);
+            if (exist) {
+                exist.qty += 1;
+            } else {
+                currentCart.push({ id: prod.id, name: prod.name, price: prod.price, qty: 1 });
+            }
+            renderCartUI();
+        }
+
+        function updateCartQty(prodId, delta) {
+            const exist = currentCart.find(item => item.id === prodId);
+            if (exist) {
+                exist.qty += delta;
+                if (exist.qty <= 0) {
+                    currentCart = currentCart.filter(item => item.id !== prodId);
+                }
+            }
+            renderCartUI();
+        }
+
+        function clearCart() {
+            currentCart = [];
+            renderCartUI();
+        }
+
+        function setPaymentMethod(method) {
+            selectedPayment = method;
+            const btnCash = document.getElementById('payBtnCash');
+            const btnQRIS = document.getElementById('payBtnQRIS');
+
+            if (method === 'Cash') {
+                btnCash.className = "py-2 border-2 border-maroon bg-maroon-soft text-maroon font-bold rounded-xl text-xs flex items-center justify-center gap-1";
+                btnQRIS.className = "py-2 border-2 border-gray-200 text-gray-600 font-bold rounded-xl text-xs flex items-center justify-center gap-1";
+            } else {
+                btnQRIS.className = "py-2 border-2 border-maroon bg-maroon-soft text-maroon font-bold rounded-xl text-xs flex items-center justify-center gap-1";
+                btnCash.className = "py-2 border-2 border-gray-200 text-gray-600 font-bold rounded-xl text-xs flex items-center justify-center gap-1";
+            }
+        }
+
+        function renderCartUI() {
+            const container = document.getElementById('cartItemsList');
+            if (!container) return;
+
+            if (currentCart.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-xs text-gray-400">Keranjang masih kosong</div>`;
+                document.getElementById('cartSubtotal').innerText = "Rp 0";
+                document.getElementById('cartTotal').innerText = "Rp 0";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = currentCart.map(item => {
+                const sub = item.price * item.qty;
+                total += sub;
+                return `
+                    <div class="flex items-center justify-between bg-cream p-2.5 rounded-xl border border-maroon-soft">
+                        <div class="max-w-[120px]">
+                            <h6 class="font-bold text-xs text-gray-800 truncate">${item.name}</h6>
+                            <p class="text-[10px] text-gray-500">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateCartQty('${item.id}', -1)" class="w-6 h-6 bg-gray-200 rounded-full font-bold text-xs">-</button>
+                            <span class="text-xs font-bold">${item.qty}</span>
+                            <button onclick="updateCartQty('${item.id}', 1)" class="w-6 h-6 bg-maroon text-white rounded-full font-bold text-xs">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cartSubtotal').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+            document.getElementById('cartTotal').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function processCheckout() {
+            if (currentCart.length === 0) {
+                showToast("Keranjang masih kosong!");
+                return;
+            }
+
+            const trxId = "#TRX-" + Math.floor(100000 + Math.random() * 900000);
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID') + " " + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            const total = currentCart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+            const newTrx = {
+                id: trxId,
+                date: dateStr,
+                items: [...currentCart],
+                total: total,
+                payment: selectedPayment
+            };
+
+            appState.transactions.unshift(newTrx);
+            saveState();
+
+            // Populate Struk Modal
+            let receiptHTML = `
+                <div class="text-center font-bold pb-2 border-b border-gray-300">
+                    <div class="text-sm">${appState.identity.name}</div>
+                    <div class="text-[10px] text-gray-500 font-normal">${appState.identity.address}</div>
+                </div>
+                <div class="py-2 border-b border-gray-300">
+                    <div>No: ${trxId}</div>
+                    <div>Waktu: ${dateStr}</div>
+                    <div>Metode: ${selectedPayment}</div>
+                </div>
+                <div class="py-2 border-b border-gray-300 space-y-1">
+            `;
+
+            currentCart.forEach(i => {
+                receiptHTML += `
+                    <div class="flex justify-between">
+                        <span>${i.name} x${i.qty}</span>
+                        <span>Rp ${(i.price * i.qty).toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+            });
+
+            receiptHTML += `
+                </div>
+                <div class="pt-2 flex justify-between font-bold text-sm">
+                    <span>TOTAL</span>
+                    <span>Rp ${total.toLocaleString('id-ID')}</span>
+                </div>
+                <div class="text-center pt-2 text-[10px] text-gray-500">Terima kasih atas kunjungannya!</div>
+            `;
+
+            document.getElementById('receiptContent').innerHTML = receiptHTML;
+            document.getElementById('receiptModal').classList.remove('hidden');
+
+            clearCart();
+            showToast("Transaksi berhasil diproses!");
+        }
+
+        function renderCashierHistory() {
+            const tbody = document.getElementById('cashierHistoryTable');
+            if (!tbody) return;
+
+            if (appState.transactions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">Belum ada riwayat transaksi.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = appState.transactions.map(t => `
+                <tr class="border-b hover:bg-cream">
+                    <td class="p-3 font-bold text-maroon">${t.id}</td>
+                    <td class="p-3 text-xs">${t.date}</td>
+                    <td class="p-3 text-xs">${t.items.map(i => `${i.name} (x${i.qty})`).join(', ')}</td>
+                    <td class="p-3 text-xs"><span class="px-2 py-0.5 bg-gray-100 rounded-full font-bold">${t.payment}</span></td>
+                    <td class="p-3 font-bold">Rp ${t.total.toLocaleString('id-ID')}</td>
+                </tr>
+            `).join('');
+        }
+
+        /* -------------------------------------------------------------
+           5. ADMIN & CMS LOGIC
+        ------------------------------------------------------------- */
+        let isAdminLoggedIn = false;
+
+        function loginAdmin() {
+            const pin = document.getElementById('adminPinInput').value;
+            if (pin === "admin123") {
+                isAdminLoggedIn = true;
+                document.getElementById('adminAuthModal').classList.add('hidden');
+                document.getElementById('adminMainContent').classList.remove('hidden');
+                showToast("Berhasil login Admin!");
+            } else {
+                showToast("PIN Admin Salah! (Default: admin123)");
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminAuthModal').classList.remove('hidden');
+            document.getElementById('adminMainContent').classList.add('hidden');
+            document.getElementById('adminPinInput').value = "";
+        }
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-tab-btn').forEach(b => {
+                b.className = "admin-tab-btn px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200";
+            });
+            document.getElementById(`admin-tab-${tab}`).className = "admin-tab-btn px-4 py-2 rounded-xl bg-maroon text-white";
+
+            document.getElementById('admin-sec-dashboard').classList.add('hidden');
+            document.getElementById('admin-sec-sales').classList.add('hidden');
+            document.getElementById('admin-sec-stock').classList.add('hidden');
+            document.getElementById('admin-sec-cms').classList.add('hidden');
+
+            document.getElementById(`admin-sec-${tab}`).classList.remove('hidden');
+        }
+
+        function renderAdminDashboard() {
+            const totalRev = appState.transactions.reduce((sum, t) => sum + t.total, 0);
+            const totalTrx = appState.transactions.length;
+            const itemsSold = appState.transactions.reduce((sum, t) => {
+                return sum + t.items.reduce((isum, i) => isum + i.qty, 0);
+            }, 0);
+            const lowStockCount = appState.stocks.filter(s => s.qty <= 10).length;
+
+            document.getElementById('dashTotalRevenue').innerText = `Rp ${totalRev.toLocaleString('id-ID')}`;
+            document.getElementById('dashTotalTrx').innerText = totalTrx;
+            document.getElementById('dashItemsSold').innerText = `${itemsSold} pcs`;
+            document.getElementById('dashLowStockCount').innerText = `${lowStockCount} Bahan`;
+
+            // Low Stock Warning List
+            const lowStocks = appState.stocks.filter(s => s.qty <= 10);
+            const lowContainer = document.getElementById('dashLowStockList');
+            if (lowStocks.length === 0) {
+                lowContainer.innerHTML = `<div class="text-xs text-green-600 font-bold">✓ Semua stok bahan baku dalam batas aman.</div>`;
+            } else {
+                lowContainer.innerHTML = lowStocks.map(s => `
+                    <div class="flex justify-between items-center p-2.5 bg-amber-50 rounded-xl text-xs border border-amber-200">
+                        <span class="font-bold text-amber-900">${s.name}</span>
+                        <span class="font-bold text-amber-600">${s.qty} ${s.unit} (Hampir Habis)</span>
+                    </div>
+                `).join('');
+            }
+
+            // Top Products Calc
+            const prodSales = {};
+            appState.transactions.forEach(t => {
+                t.items.forEach(i => {
+                    prodSales[i.name] = (prodSales[i.name] || 0) + i.qty;
+                });
+            });
+
+            const topContainer = document.getElementById('dashTopProductsList');
+            const sortedProds = Object.entries(prodSales).sort((a, b) => b[1] - a[1]).slice(0, 4);
+
+            if (sortedProds.length === 0) {
+                topContainer.innerHTML = `<div class="text-xs text-gray-400">Belum ada data penjualan.</div>`;
+            } else {
+                topContainer.innerHTML = sortedProds.map(([name, qty]) => `
+                    <div class="flex justify-between items-center p-2.5 bg-cream rounded-xl text-xs border border-maroon-soft">
+                        <span class="font-bold text-gray-800">${name}</span>
+                        <span class="font-extrabold text-maroon">${qty} Terjual</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function renderAdminSales() {
+            const tbody = document.getElementById('adminSalesTable');
+            if (!tbody) return;
+
+            if (appState.transactions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">Belum ada riwayat transaksi.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = appState.transactions.map(t => `
+                <tr class="border-b hover:bg-cream">
+                    <td class="p-3 font-bold text-maroon">${t.id}</td>
+                    <td class="p-3 text-xs">${t.date}</td>
+                    <td class="p-3 text-xs">${t.items.map(i => `${i.name} (x${i.qty})`).join(', ')}</td>
+                    <td class="p-3 text-xs"><span class="px-2 py-0.5 bg-gray-100 rounded-full font-bold">${t.payment}</span></td>
+                    <td class="p-3 font-bold">Rp ${t.total.toLocaleString('id-ID')}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearAllTransactions() {
+            if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat penjualan?")) {
+                appState.transactions = [];
+                saveState();
+                showToast("Riwayat penjualan berhasil di-reset!");
+            }
+        }
+
+        /* Stock Management */
+        function renderAdminStock() {
+            const tbody = document.getElementById('adminStockTable');
+            if (!tbody) return;
+
+            tbody.innerHTML = appState.stocks.map(s => {
+                const isLow = s.qty <= 10;
+                const statusBadge = isLow 
+                    ? `<span class="px-2.5 py-1 bg-red-100 text-red-600 rounded-full text-[10px] font-bold">Hampir Habis</span>`
+                    : `<span class="px-2.5 py-1 bg-green-100 text-green-600 rounded-full text-[10px] font-bold">Aman</span>`;
+
+                return `
+                    <tr class="border-b hover:bg-cream">
+                        <td class="p-3 font-bold text-gray-800">${s.name}</td>
+                        <td class="p-3 font-bold">${s.qty}</td>
+                        <td class="p-3 text-xs text-gray-500">${s.unit}</td>
+                        <td class="p-3">${statusBadge}</td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="adjustStock('${s.id}', 1)" class="px-2 py-1 bg-green-500 text-white rounded-lg text-xs font-bold">+1</button>
+                            <button onclick="adjustStock('${s.id}', -1)" class="px-2 py-1 bg-amber-500 text-white rounded-lg text-xs font-bold">-1</button>
+                            <button onclick="openStockModal('${s.id}')" class="px-2 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold">Edit</button>
+                            <button onclick="deleteStock('${s.id}')" class="px-2 py-1 bg-red-500 text-white rounded-lg text-xs font-bold">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function adjustStock(id, delta) {
+            const item = appState.stocks.find(s => s.id === id);
+            if (item) {
+                item.qty = Math.max(0, item.qty + delta);
+                saveState();
+            }
+        }
+
+        function openStockModal(id = null) {
+            const form = document.getElementById('stockForm');
+            form.reset();
+            if (id) {
+                const s = appState.stocks.find(item => item.id === id);
+                document.getElementById('stockFormId').value = s.id;
+                document.getElementById('stockFormName').value = s.name;
+                document.getElementById('stockFormQty').value = s.qty;
+                document.getElementById('stockFormUnit').value = s.unit;
+                document.getElementById('stockFormTitle').innerText = "Edit Bahan Baku";
+            } else {
+                document.getElementById('stockFormId').value = "";
+                document.getElementById('stockFormTitle').innerText = "Tambah Bahan Baku Baru";
+            }
+            document.getElementById('stockFormModal').classList.remove('hidden');
+        }
+
+        function saveStock(e) {
+            e.preventDefault();
+            const id = document.getElementById('stockFormId').value;
+            const name = document.getElementById('stockFormName').value;
+            const qty = parseInt(document.getElementById('stockFormQty').value);
+            const unit = document.getElementById('stockFormUnit').value;
+
+            if (id) {
+                const s = appState.stocks.find(item => item.id === id);
+                if (s) {
+                    s.name = name;
+                    s.qty = qty;
+                    s.unit = unit;
+                }
+            } else {
+                appState.stocks.push({
+                    id: "s" + Date.now(),
+                    name, qty, unit
+                });
+            }
+
+            saveState();
+            closeModal('stockFormModal');
+            showToast("Data stok berhasil disimpan!");
+        }
+
+        function deleteStock(id) {
+            if (confirm("Hapus bahan baku ini?")) {
+                appState.stocks = appState.stocks.filter(s => s.id !== id);
+                saveState();
+                showToast("Bahan baku dihapus!");
+            }
+        }
+
+        /* CMS Website Management (Real-time updates) */
+        function renderAdminCMS() {
+            // Populate Identity Form inputs
+            const iden = appState.identity;
+            document.getElementById('cmsStoreName').value = iden.name;
+            document.getElementById('cmsStoreLogo').value = iden.logo;
+            document.getElementById('cmsStoreDesc').value = iden.description;
+            document.getElementById('cmsStoreAddress').value = iden.address;
+            document.getElementById('cmsStoreHours').value = iden.hours;
+            document.getElementById('cmsStoreWA').value = iden.wa;
+            document.getElementById('cmsStoreIG').value = iden.ig;
+            document.getElementById('cmsStoreTikTok').value = iden.tiktok;
+
+            // Populate Products Management List
+            const prodList = document.getElementById('cmsProductList');
+            prodList.innerHTML = appState.products.map(p => `
+                <div class="bg-cream p-3 rounded-2xl border border-maroon-soft flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover" onerror="this.src='https://placehold.co/100/800020/fff'">
+                        <div>
+                            <h5 class="font-bold text-xs text-gray-800">${p.name}</h5>
+                            <p class="text-[10px] text-maroon font-extrabold">Rp ${p.price.toLocaleString('id-ID')} | ${p.category}</p>
+                        </div>
+                    </div>
+                    <div class="space-x-1">
+                        <button onclick="openProductModal('${p.id}')" class="px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold">Edit</button>
+                        <button onclick="deleteProduct('${p.id}')" class="px-2.5 py-1 bg-red-500 text-white rounded-lg text-xs font-bold">Hapus</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Populate Promo Management List
+            const promoList = document.getElementById('cmsPromoList');
+            promoList.innerHTML = appState.promos.map(pr => `
+                <div class="bg-cream p-3 rounded-2xl border border-maroon-soft flex items-center justify-between">
+                    <div>
+                        <span class="px-2 py-0.5 bg-maroon text-white rounded text-[10px] font-bold">${pr.tag}</span>
+                        <h5 class="font-bold text-xs text-gray-800 mt-1">${pr.title}</h5>
+                    </div>
+                    <div class="space-x-1">
+                        <button onclick="openPromoModal('${pr.id}')" class="px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold">Edit</button>
+                        <button onclick="deletePromo('${pr.id}')" class="px-2.5 py-1 bg-red-500 text-white rounded-lg text-xs font-bold">Hapus</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveIdentity(e) {
+            e.preventDefault();
+            appState.identity = {
+                name: document.getElementById('cmsStoreName').value,
+                logo: document.getElementById('cmsStoreLogo').value,
+                description: document.getElementById('cmsStoreDesc').value,
+                address: document.getElementById('cmsStoreAddress').value,
+                hours: document.getElementById('cmsStoreHours').value,
+                wa: document.getElementById('cmsStoreWA').value,
+                ig: document.getElementById('cmsStoreIG').value,
+                tiktok: document.getElementById('cmsStoreTikTok').value
+            };
+            saveState();
+            showToast("Identitas Usaha Berhasil Disimpan & Ter-update!");
+        }
+
+        /* Product CRUD */
+        function openProductModal(id = null) {
+            const form = document.getElementById('productForm');
+            form.reset();
+            if (id) {
+                const p = appState.products.find(item => item.id === id);
+                document.getElementById('prodFormId').value = p.id;
+                document.getElementById('prodFormName').value = p.name;
+                document.getElementById('prodFormCategory').value = p.category;
+                document.getElementById('prodFormPrice').value = p.price;
+                document.getElementById('prodFormImage').value = p.image;
+                document.getElementById('prodFormDesc').value = p.description;
+                document.getElementById('productFormTitle').innerText = "Edit Produk";
+            } else {
+                document.getElementById('prodFormId').value = "";
+                document.getElementById('productFormTitle').innerText = "Tambah Produk Baru";
+            }
+            document.getElementById('productFormModal').classList.remove('hidden');
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('prodFormId').value;
+            const name = document.getElementById('prodFormName').value;
+            const category = document.getElementById('prodFormCategory').value;
+            const price = parseInt(document.getElementById('prodFormPrice').value);
+            const image = document.getElementById('prodFormImage').value;
+            const description = document.getElementById('prodFormDesc').value;
+
+            if (id) {
+                const p = appState.products.find(item => item.id === id);
+                if (p) {
+                    p.name = name;
+                    p.category = category;
+                    p.price = price;
+                    p.image = image;
+                    p.description = description;
+                }
+            } else {
+                appState.products.push({
+                    id: "p" + Date.now(),
+                    name, category, price, image, description
+                });
+            }
+
+            saveState();
+            closeModal('productFormModal');
+            showToast("Produk berhasil diperbarui!");
+        }
+
+        function deleteProduct(id) {
+            if (confirm("Hapus produk ini?")) {
+                appState.products = appState.products.filter(p => p.id !== id);
+                saveState();
+                showToast("Produk dihapus!");
+            }
+        }
+
+        /* Promo CRUD */
+        function openPromoModal(id = null) {
+            const form = document.getElementById('promoForm');
+            form.reset();
+            if (id) {
+                const pr = appState.promos.find(item => item.id === id);
+                document.getElementById('promoFormId').value = pr.id;
+                document.getElementById('promoFormTitleInput').value = pr.title;
+                document.getElementById('promoFormDesc').value = pr.desc;
+                document.getElementById('promoFormTag').value = pr.tag;
+                document.getElementById('promoFormTitle').innerText = "Edit Promo";
+            } else {
+                document.getElementById('promoFormId').value = "";
+                document.getElementById('promoFormTitle').innerText = "Tambah Promo Baru";
+            }
+            document.getElementById('promoFormModal').classList.remove('hidden');
+        }
+
+        function savePromo(e) {
+            e.preventDefault();
+            const id = document.getElementById('promoFormId').value;
+            const title = document.getElementById('promoFormTitleInput').value;
+            const desc = document.getElementById('promoFormDesc').value;
+            const tag = document.getElementById('promoFormTag').value;
+
+            if (id) {
+                const pr = appState.promos.find(item => item.id === id);
+                if (pr) {
+                    pr.title = title;
+                    pr.desc = desc;
+                    pr.tag = tag;
+                }
+            } else {
+                appState.promos.push({
+                    id: "pr" + Date.now(),
+                    title, desc, tag
+                });
+            }
+
+            saveState();
+            closeModal('promoFormModal');
+            showToast("Promo berhasil disimpan!");
+        }
+
+        function deletePromo(id) {
+            if (confirm("Hapus promo ini?")) {
+                appState.promos = appState.promos.filter(pr => pr.id !== id);
+                saveState();
+                showToast("Promo dihapus!");
+            }
+        }
+
+        /* UTILS */
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            initStorage();
+            renderUniversal();
+        };
+    </script>
+</body>
+</html>
